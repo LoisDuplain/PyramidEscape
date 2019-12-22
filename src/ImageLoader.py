@@ -4,12 +4,8 @@ images = {}
 
 
 def loadImage(imageName):
-    print("Hey ! I want", imageName)
     if imageName in images:
-        print("I have !", images)
         return images[imageName]
-    else:
-        print("I don't have :/")
 
     image_path = "resources/img/" + imageName
     try:
