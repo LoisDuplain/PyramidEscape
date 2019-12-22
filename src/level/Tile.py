@@ -8,8 +8,8 @@ class TileType(Enum):
 
 
 class Tile(RenderableObject):
-    CONSTANT_TILE_WIDTH = 30
-    CONSTANT_TILE_HEIGHT = 30
+    CONSTANT_TILE_WIDTH_FHD = 60
+    CONSTANT_TILE_HEIGHT_FHD = 60
 
     """
         CONSTRUCT
