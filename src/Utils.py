@@ -1,20 +1,5 @@
 import math
 import time
-import pygame
-
-
-def loadImage(imageName):
-    image_path = "resources/img/" + imageName
-    try:
-        image = pygame.image.load(image_path)
-        if image.get_alpha is None:
-            image = image.convert()
-        else:
-            image = image.convert_alpha()
-    except pygame.error as message:
-        print('Cannot load image:', image_path)
-        raise SystemExit(message)
-    return image
 
 
 def get_current_time_millis():

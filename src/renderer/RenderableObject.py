@@ -1,7 +1,8 @@
 import math
 import pygame
-import Utils
 from enum import Enum
+import ImageLoader
+import Utils
 
 
 class RenderableObject(pygame.sprite.Sprite):
@@ -12,7 +13,7 @@ class RenderableObject(pygame.sprite.Sprite):
     def __init__(self, image):
         super(RenderableObject, self).__init__()
 
-        self.original_image = Utils.loadImage(image)
+        self.original_image = ImageLoader.loadImage(image)
         self.original_width = self.original_image.get_width()
         self.original_height = self.original_image.get_height()
 
