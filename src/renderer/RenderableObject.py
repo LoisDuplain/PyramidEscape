@@ -1,23 +1,7 @@
 import math
-from enum import Enum
-
 import pygame
-
 import Utils
-
-
-def loadImage(imageName):
-    image_path = "resources/img/" + imageName
-    try:
-        image = pygame.image.load(image_path)
-        if image.get_alpha is None:
-            image = image.convert()
-        else:
-            image = image.convert_alpha()
-    except pygame.error as message:
-        print('Cannot load image:', image_path)
-        raise SystemExit(message)
-    return image
+from enum import Enum
 
 
 class RenderableObject(pygame.sprite.Sprite):
@@ -28,7 +12,7 @@ class RenderableObject(pygame.sprite.Sprite):
     def __init__(self, image):
         super(RenderableObject, self).__init__()
 
-        self.original_image = loadImage(image)
+        self.original_image = Utils.loadImage(image)
         self.original_width = self.original_image.get_width()
         self.original_height = self.original_image.get_height()
 
@@ -49,12 +33,13 @@ class RenderableObject(pygame.sprite.Sprite):
         METHODS
     """
 
-    def render(self, screen, x, y, angle=0):
+    def render(self, screen, world_x, world_y, angle=0):
+        # TODO prendre en cosidération la fake caméra, bon courage pcq ca va être casse couille ;)
         screen.blit(self.current_image, self.rect)
-        self.compute_center_point(screen, x, y, angle)
+        self.compute_center_point(screen, world_x, world_y, angle)
         if self.render_anchor:
-            pygame.draw.line(screen, pygame.Color(0, 0, 255), (x - 5, y), (x + 5, y))
-            pygame.draw.line(screen, pygame.Color(255, 0, 0), (x, y - 5), (x, y + 5))
+            pygame.draw.line(screen, pygame.Color(0, 0, 255), (world_x - 5, world_y), (world_x + 5, world_y))
+            pygame.draw.line(screen, pygame.Color(255, 0, 0), (world_x, world_y - 5), (world_x, world_y + 5))
         if self.render_border:
             pygame.draw.rect(screen, pygame.Color(0, 255, 0), self.rect, 1)
 
