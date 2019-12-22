@@ -16,12 +16,6 @@ class Level:
         self.camera = Camera()
         self.tiles = []
 
-        self.angle = 0
-
-        self.at = AnchorType.TOP_MIDDLE
-        self.test_render_image = RenderableObject("player-head.png")
-        self.test_render_image.set_anchor(self.at)
-
         self.generate_tiles()
 
     def generate_tiles(self):
@@ -43,10 +37,6 @@ class Level:
         # TODO Render player
         # TODO Render particles
         # TODO Render HUD
-
-        pygame.draw.line(screen, pygame.Color(255, 255, 255), (50, 0), (50, 540))
-        pygame.draw.line(screen, pygame.Color(255, 255, 255), (0, 70), (960, 70))
-        self.test_render_image.render(screen, 50, 70, self.angle)
         pass
 
     def update(self, delta_time):
@@ -54,7 +44,6 @@ class Level:
         # TODO Update camera pos
         # TODO Update particle systems
         # TODO Update movable entities
-        self.angle += 1
         pass
 
     def events(self, event):
@@ -66,9 +55,6 @@ class Level:
         pass
 
     def key_pressed(self, key):
-        if key == pygame.K_a:
-            self.at = AnchorType(self.at.value + 1)
-            self.test_render_image.set_anchor(self.at)
         pass
 
     def key_released(self, key):
