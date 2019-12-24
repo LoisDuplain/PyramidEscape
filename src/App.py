@@ -22,9 +22,7 @@ def main():
         delta_time = Utils.get_current_time_millis() - last_update_date
         if delta_time >= 1000/60:
             last_update_date = Utils.get_current_time_millis()
-            current_level.update(delta_time)
-            # Send pressed keys to current level
-            current_level.key_down(pygame.key.get_pressed())
+            current_level.update(delta_time, pygame.key.get_pressed())
             # Check events
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:

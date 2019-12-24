@@ -90,7 +90,7 @@ class RenderableObject(pygame.sprite.Sprite):
     def set_current_image(self, new_current_image):
         self.current_image = new_current_image
         self.current_width = new_current_image.get_width()
-        self.curren_height = new_current_image.get_height()
+        self.current_height = new_current_image.get_height()
 
     def get_current_width(self):
         return self.current_width

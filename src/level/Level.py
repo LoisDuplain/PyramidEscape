@@ -39,35 +39,36 @@ class Level:
         # TODO Render particles
         # TODO Render HUD
 
-        """
         # TEST PLAYER SHAPE
-        # - head
-        pygame.draw.rect(screen, pygame.Color(48, 51, 107), pygame.Rect(100, 100, 30, 30))
-        # - chest
-        pygame.draw.rect(screen, pygame.Color(235, 77, 75), pygame.Rect(100, 130, 30, 50))
-        # - left arm
-        pygame.draw.rect(screen, pygame.Color(106, 176, 76), pygame.Rect(85, 130, 15, 50))
-        # - right arm
-        pygame.draw.rect(screen, pygame.Color(34, 166, 179), pygame.Rect(130, 130, 15, 50))
-        # - left leg
-        pygame.draw.rect(screen, pygame.Color(186, 220, 88), pygame.Rect(100, 180, 15, 50))
-        # - right leg
-        pygame.draw.rect(screen, pygame.Color(126, 214, 223), pygame.Rect(115, 180, 15, 50))"""
+        test_player = False
+        if test_player:
+            # - head
+            pygame.draw.rect(screen, pygame.Color(48, 51, 107), pygame.Rect(100, 100, 30, 30))
+            # - chest
+            pygame.draw.rect(screen, pygame.Color(235, 77, 75), pygame.Rect(100, 130, 30, 50))
+            # - left arm
+            pygame.draw.rect(screen, pygame.Color(106, 176, 76), pygame.Rect(85, 130, 15, 50))
+            # - right arm
+            pygame.draw.rect(screen, pygame.Color(34, 166, 179), pygame.Rect(130, 130, 15, 50))
+            # - left leg
+            pygame.draw.rect(screen, pygame.Color(186, 220, 88), pygame.Rect(100, 180, 15, 50))
+            # - right leg
+            pygame.draw.rect(screen, pygame.Color(126, 214, 223), pygame.Rect(115, 180, 15, 50))
         pass
 
-    def update(self, delta_time):
+    def update(self, delta_time, keys):
         # TODO Update player pos
         # TODO Update camera pos
         # TODO Update particle systems
         # TODO Update movable entities
+        if keys[pygame.K_d]:
+            self.player.set_world_x(self.player.get_world_x()+delta_time/10)
+        if keys[pygame.K_a]:
+            self.player.set_world_x(self.player.get_world_x()-delta_time/10)
         pass
 
     def events(self, event):
         # Events
-        pass
-
-    def key_down(self, keys):
-        # TODO Detect key entries
         pass
 
     def key_pressed(self, key):
