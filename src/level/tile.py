@@ -1,14 +1,13 @@
 from enum import Enum
-from component.renderer.renderer import Renderer, AnchorType
+from renderer.RenderableObject import RenderableObject
 
 
 class TileType(Enum):
-    AIR = "air.png"
     GROUND = "ground.png"
     SPIKE = "spike.png"
 
 
-class Tile(Renderer):
+class Tile(RenderableObject):
     CONSTANT_TILE_WIDTH_FHD = 60
     CONSTANT_TILE_HEIGHT_FHD = 60
 
@@ -17,8 +16,7 @@ class Tile(Renderer):
     """
 
     def __init__(self, tile_type, x, y):
-        super().__init__(tile_type.value)
-        super().set_anchor(AnchorType.TOP_LEFT)
+        super.__init__(tile_type.value)
         self.tile_type = tile_type
         self.x = x
         self.y = y
@@ -27,8 +25,8 @@ class Tile(Renderer):
         METHODS
     """
 
-    def render(self, screen, camera):
-        super().render(screen, self.x*self.CONSTANT_TILE_WIDTH_FHD, self.y*self.CONSTANT_TILE_HEIGHT_FHD, camera)
+    def render(self, screen):
+        # TODO Render tile
         pass
 
     """
@@ -51,4 +49,4 @@ class Tile(Renderer):
         return self.y
 
     def set_y(self, new_y):
-        self.y = new_y
+        self.y = y

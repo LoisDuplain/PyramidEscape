@@ -1,8 +1,8 @@
 import pygame
 
-from level.camera import Camera
-from entity.player.player import Player
-import CONSTANTS
+from Camera import Camera
+from player.Player import Player
+from renderer.RenderableObject import RenderableObject, AnchorType
 
 
 class Level:
@@ -13,14 +13,19 @@ class Level:
     def __init__(self, level_name):
         self.level_name = level_name
         self.player = Player()
-
         self.camera = Camera()
-        self.camera.set_x(self.player.get_world_x())
-        self.camera.set_y(self.player.get_world_y())
-
         self.tiles = []
 
-        self.debug = False
+        self.generate_tiles()
+
+    def generate_tiles(self):
+        # TODO Load chars into the file that contains level_name in his file name and then, generate tiles
+        """
+            PART OF CODE EXAMPLE:
+                if char==1:
+                    self.tiles.append(Tile(TileType.GROUND, 0, 0))
+        """
+        pass
 
     """
         METHODS
@@ -28,21 +33,11 @@ class Level:
 
     def render(self, screen):
         # TODO Render tiles
-        for y in range(len(self.tiles)):
-            for x in range(len(self.tiles[y])):
-                self.tiles[y][x].render(screen, self.camera)
-
         # TODO Render movable entities (Fireball etc)
         # TODO Render player
-        self.player.render(screen, self.camera)
+        self.player.render(screen)
         # TODO Render particles
         # TODO Render HUD
-
-        if self.debug:
-            pygame.draw.line(screen, pygame.Color(255, 255, 255), (CONSTANTS.CONSTANT_WINDOW_WIDTH / 2, 0),
-                             (CONSTANTS.CONSTANT_WINDOW_WIDTH / 2, CONSTANTS.CONSTANT_WINDOW_HEIGHT))
-            pygame.draw.line(screen, pygame.Color(255, 255, 255), (0, CONSTANTS.CONSTANT_WINDOW_HEIGHT / 2),
-                             (CONSTANTS.CONSTANT_WINDOW_WIDTH, CONSTANTS.CONSTANT_WINDOW_HEIGHT / 2))
 
         # TEST PLAYER SHAPE
         test_player = False
@@ -67,17 +62,9 @@ class Level:
         # TODO Update particle systems
         # TODO Update movable entities
         if keys[pygame.K_d]:
-            self.player.set_world_x(self.player.get_world_x() + delta_time)
-            self.camera.set_x(self.player.get_world_x())
+            self.player.set_world_x(self.player.get_world_x()+delta_time/10)
         if keys[pygame.K_a]:
-            self.player.set_world_x(self.player.get_world_x() - delta_time)
-            self.camera.set_x(self.player.get_world_x())
-        if keys[pygame.K_w]:
-            self.player.set_world_y(self.player.get_world_y() - delta_time)
-            self.camera.set_y(self.player.get_world_y())
-        if keys[pygame.K_s]:
-            self.player.set_world_y(self.player.get_world_y() + delta_time)
-            self.camera.set_y(self.player.get_world_y())
+            self.player.set_world_x(self.player.get_world_x()-delta_time/10)
         pass
 
     def events(self, event):
@@ -85,8 +72,6 @@ class Level:
         pass
 
     def key_pressed(self, key):
-        if key == pygame.K_COMMA:
-            self.debug = not self.debug
         pass
 
     def key_released(self, key):
