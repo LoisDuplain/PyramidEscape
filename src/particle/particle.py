@@ -1,7 +1,7 @@
-from component.renderer.renderer import Renderer
+from renderer.RenderableObject import RenderableObject
 
 
-class Particle(Renderer):
+class Particle(RenderableObject):
     def __init__(self):
         # TODO Constructor
         pass
