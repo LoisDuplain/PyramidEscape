@@ -1,5 +1,5 @@
 from enum import Enum
-from renderer.RenderableObject import RenderableObject, AnchorType
+from renderer.renderer import Renderer, AnchorType
 
 
 class TileType(Enum):
@@ -8,7 +8,7 @@ class TileType(Enum):
     SPIKE = "spike.png"
 
 
-class Tile(RenderableObject):
+class Tile(Renderer):
     CONSTANT_TILE_WIDTH_FHD = 60
     CONSTANT_TILE_HEIGHT_FHD = 60
 

@@ -1,9 +1,8 @@
 import pygame
 
-from Camera import Camera
-from level.Tile import Tile
-from level.Tile import TileType
-from player.Player import Player
+from camera import Camera
+from level.tile import Tile, TileType
+from player.player import Player
 import CONSTANTS
 
 

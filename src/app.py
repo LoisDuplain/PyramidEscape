@@ -1,7 +1,7 @@
 import pygame
-import Utils
+import utils
 import CONSTANTS
-from level.Level import Level
+from level.level import Level
 
 current_level = None
 
@@ -14,15 +14,15 @@ def main():
 
     current_level = Level("main-menu.lvl")
 
-    last_update_date = Utils.get_current_time_millis()
-    last_render_date = Utils.get_current_time_millis()
+    last_update_date = utils.get_current_time_millis()
+    last_render_date = utils.get_current_time_millis()
 
     run = True
     while run:
         # Update level
-        update_delta_time = Utils.get_current_time_millis() - last_update_date
-        if update_delta_time >= 1000/60:
-            last_update_date = Utils.get_current_time_millis()
+        update_delta_time = utils.get_current_time_millis() - last_update_date
+        if update_delta_time >= 1000/120:
+            last_update_date = utils.get_current_time_millis()
             current_level.update(update_delta_time, pygame.key.get_pressed())
             # Check events
             for event in pygame.event.get():
@@ -35,9 +35,9 @@ def main():
 
                 current_level.events(event)
                 
-        render_delta_time = Utils.get_current_time_millis() - last_render_date
+        render_delta_time = utils.get_current_time_millis() - last_render_date
         if render_delta_time >= 1000/30:
-            last_render_date = Utils.get_current_time_millis()
+            last_render_date = utils.get_current_time_millis()
             # Render level
             # 1- Render background
             screen.fill((0, 0, 0))
