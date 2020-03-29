@@ -1,4 +1,4 @@
-from renderer.renderer import Renderer
+from component.renderer.renderer import Renderer
 
 
 class Particle(Renderer):

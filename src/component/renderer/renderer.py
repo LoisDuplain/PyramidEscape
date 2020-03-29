@@ -2,8 +2,7 @@ import math
 import pygame
 from enum import Enum
 
-import CONSTANTS
-import imageloader
+from component.renderer import imageloader
 import utils
 
 

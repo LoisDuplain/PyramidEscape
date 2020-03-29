@@ -1,5 +1,5 @@
 from enum import Enum
-from renderer.renderer import Renderer, AnchorType
+from component.renderer.renderer import Renderer, AnchorType
 
 
 class TileType(Enum):
