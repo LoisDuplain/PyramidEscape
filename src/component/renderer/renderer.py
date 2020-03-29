@@ -1,19 +1,20 @@
 import math
 import pygame
 from enum import Enum
-import ImageLoader
-import Utils
+
+from component.renderer import imageloader
+import utils
 
 
-class RenderableObject(pygame.sprite.Sprite):
+class Renderer(pygame.sprite.Sprite):
     """
         CONSTRUCT
     """
 
     def __init__(self, image):
-        super(RenderableObject, self).__init__()
+        super(Renderer, self).__init__()
 
-        self.original_image = ImageLoader.loadImage(image)
+        self.original_image = imageloader.loadImage(image)
         self.original_width = self.original_image.get_width()
         self.original_height = self.original_image.get_height()
 
@@ -34,23 +35,19 @@ class RenderableObject(pygame.sprite.Sprite):
         METHODS
     """
 
-    def render(self, screen, world_x, world_y, angle=0):
-        # TODO prendre en cosidération la fake caméra, bon courage pcq ca va être casse couille ;)
+    def render(self, screen, x, y, camera, angle=0):
+        self.compute_center_point(screen, x, y, angle, camera)
         screen.blit(self.current_image, self.rect)
-        self.compute_center_point(screen, world_x, world_y, angle)
-        if self.render_anchor:
-            pygame.draw.line(screen, pygame.Color(0, 0, 255), (world_x - 5, world_y), (world_x + 5, world_y))
-            pygame.draw.line(screen, pygame.Color(255, 0, 0), (world_x, world_y - 5), (world_x, world_y + 5))
         if self.render_border:
             pygame.draw.rect(screen, pygame.Color(0, 255, 0), self.rect, 1)
 
-    def compute_center_point(self, screen, x, y, angle):
+    def compute_center_point(self, screen, x, y, angle, camera):
         self.set_current_image(pygame.transform.rotozoom(self.original_image, angle, 1))
         self.rect = self.get_current_image().get_rect()
 
         dx = self.original_width / 2 - self.anchor_x
         dy = self.original_height / 2 - self.anchor_y
-        d = Utils.calculate_distance(self.anchor_x, self.anchor_y, self.anchor_x + dx, self.anchor_y + dy)
+        d = utils.calculate_distance(self.anchor_x, self.anchor_y, self.anchor_x + dx, self.anchor_y + dy)
 
         a = math.atan2(dy, dx)
         a -= math.radians(angle)
@@ -60,11 +57,13 @@ class RenderableObject(pygame.sprite.Sprite):
         ny = math.sin(a)*d
 
         if self.render_anchor:
-            pygame.draw.line(screen, pygame.Color(200, 66, 245), (x, y), (x + nx, y))
-            pygame.draw.line(screen, pygame.Color(200, 66, 245), (x + nx, y), (x + nx, y + ny))
+            pygame.draw.line(screen, pygame.Color(200, 66, 245), (camera.get_render_x(x), camera.get_render_y(y)), (camera.get_render_x(x + nx), camera.get_render_y(y)))
+            pygame.draw.line(screen, pygame.Color(200, 66, 245), (camera.get_render_x(x + nx), camera.get_render_y(y)), (camera.get_render_x(x + nx), camera.get_render_y(y + ny)))
+            pygame.draw.line(screen, pygame.Color(0, 0, 255), (camera.get_render_x(x - 5), camera.get_render_y(y)), (camera.get_render_x(x + 5), camera.get_render_y(y)))
+            pygame.draw.line(screen, pygame.Color(255, 0, 0), (camera.get_render_x(x), camera.get_render_y(y - 5)), (camera.get_render_x(x), camera.get_render_y(y + 5)))
 
-        self.rect.center = (x + nx, y + ny)
-
+        self.rect.center = (camera.get_render_x(x + nx), camera.get_render_y(y + ny))
+        
     """
         GETTERS AND SETTERS
     """
