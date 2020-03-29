@@ -1,8 +1,10 @@
 import pygame
 
 from Camera import Camera
+from level.Tile import Tile
+from level.Tile import TileType
 from player.Player import Player
-from renderer.RenderableObject import RenderableObject, AnchorType
+import CONSTANTS
 
 
 class Level:
@@ -13,19 +15,67 @@ class Level:
     def __init__(self, level_name):
         self.level_name = level_name
         self.player = Player()
+        
         self.camera = Camera()
+        self.camera.set_x(self.player.get_world_x())
+        self.camera.set_y(self.player.get_world_y())
+        
         self.tiles = []
 
         self.generate_tiles()
+        
+        self.debug = False
 
     def generate_tiles(self):
         # TODO Load chars into the file that contains level_name in his file name and then, generate tiles
-        """
-            PART OF CODE EXAMPLE:
-                if char==1:
-                    self.tiles.append(Tile(TileType.GROUND, 0, 0))
-        """
-        pass
+        file = open("level/files/" + self.level_name, "r")
+        y = 0
+        for line in file:
+            x = 0
+            x_tiles = []
+            for char in line:
+                tile_type = None
+                if char == "0":
+                    tile_type = TileType.AIR
+                elif char == "1":
+                    tile_type = TileType.GROUND
+                elif char == "2":
+                    tile_type = TileType.SPIKE
+                else:
+                    break
+                x_tiles.append(Tile(tile_type, x, y))
+                x += 1
+            self.tiles.append(x_tiles)
+            y += 1
+        file.close()
+
+        file = open("level/files/" + self.level_name, "r")
+        y = 0
+        for line in file:
+            x = len(line)-2
+            """
+                Pourquoi -2 ?
+                len(line) renvoie le nombre de caractères sur une ligne mais nous on veut compter à partir de 0 donc cela fait déjà -1
+                Ensuite on a le \n à la fin qu'il faut supprimer donc encore -1
+                
+                Donc -1 - 1 = -2
+            """
+            x_tiles = []
+            for char in line:
+                tile_type = None
+                if char == "0":
+                    tile_type = TileType.AIR
+                elif char == "1":
+                    tile_type = TileType.GROUND
+                elif char == "2":
+                    tile_type = TileType.SPIKE
+                else:
+                    break
+                x_tiles.append(Tile(tile_type, x, y+9))
+                x -= 1
+            self.tiles.append(x_tiles)
+            y += 1
+        file.close()
 
     """
         METHODS
@@ -33,11 +83,20 @@ class Level:
 
     def render(self, screen):
         # TODO Render tiles
+        for y in range (len(self.tiles)):
+            for x in range (len(self.tiles[y])):
+                self.tiles[y][x].render(screen, self.camera)
+
         # TODO Render movable entities (Fireball etc)
         # TODO Render player
-        self.player.render(screen)
+        self.player.render(screen, self.camera)
         # TODO Render particles
         # TODO Render HUD
+
+        if self.debug:
+            pygame.draw.line(screen, pygame.Color(255,255,255), (CONSTANTS.CONSTANT_WINDOW_WIDTH/2, 0), (CONSTANTS.CONSTANT_WINDOW_WIDTH/2, CONSTANTS.CONSTANT_WINDOW_HEIGHT))
+            pygame.draw.line(screen, pygame.Color(255,255,255), (0, CONSTANTS.CONSTANT_WINDOW_HEIGHT/2), (CONSTANTS.CONSTANT_WINDOW_WIDTH, CONSTANTS.CONSTANT_WINDOW_HEIGHT/2))
+            
 
         # TEST PLAYER SHAPE
         test_player = False
@@ -62,9 +121,17 @@ class Level:
         # TODO Update particle systems
         # TODO Update movable entities
         if keys[pygame.K_d]:
-            self.player.set_world_x(self.player.get_world_x()+delta_time/10)
+            self.player.set_world_x(self.player.get_world_x() + delta_time)
+            self.camera.set_x(self.player.get_world_x())
         if keys[pygame.K_a]:
-            self.player.set_world_x(self.player.get_world_x()-delta_time/10)
+            self.player.set_world_x(self.player.get_world_x() - delta_time)
+            self.camera.set_x(self.player.get_world_x())
+        if keys[pygame.K_w]:
+            self.player.set_world_y(self.player.get_world_y() - delta_time)
+            self.camera.set_y(self.player.get_world_y())
+        if keys[pygame.K_s]:
+            self.player.set_world_y(self.player.get_world_y() + delta_time)
+            self.camera.set_y(self.player.get_world_y())
         pass
 
     def events(self, event):
@@ -72,6 +139,8 @@ class Level:
         pass
 
     def key_pressed(self, key):
+        if key == pygame.K_COMMA:
+            self.debug = not self.debug
         pass
 
     def key_released(self, key):
