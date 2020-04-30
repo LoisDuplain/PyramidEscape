@@ -28,7 +28,7 @@ class Tile(Renderer):
     """
 
     def render(self, screen, camera):
-        super().render(screen, self.x*self.CONSTANT_TILE_WIDTH_FHD, self.y*self.CONSTANT_TILE_HEIGHT_FHD, camera)
+        super().render(screen, camera, self.x*self.CONSTANT_TILE_WIDTH_FHD, self.y*self.CONSTANT_TILE_HEIGHT_FHD)
         pass
 
     """

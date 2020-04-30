@@ -35,15 +35,15 @@ class Player:
     """
 
     def render(self, screen, camera):
-        self.head_member.render(screen, self.world_x, self.world_y, camera, 0)
+        self.head_member.render(screen, camera, self.world_x, self.world_y, 0)
 
-        self.chest_member.render(screen, 0, 0, camera, 0)
+        self.chest_member.render(screen, camera, 0, 0, 0)
 
-        self.left_arm_member.render(screen, 0, 0, camera, utils.map(math.cos((utils.get_current_time_millis()-self.start_at)/300), -1, 1, -3, 200))
-        self.right_arm_member.render(screen, 0, 0, camera, utils.map(math.cos((utils.get_current_time_millis()-self.start_at)/350), -1, 1, -300, 2))
+        self.left_arm_member.render(screen, camera, 0, 0, utils.map(math.cos((utils.get_current_time_millis()-self.start_at)/300), -1, 1, -3, 2))
+        self.right_arm_member.render(screen, camera, 0, 0, utils.map(math.cos((utils.get_current_time_millis()-self.start_at)/350), -1, 1, -3, 2))
 
-        self.left_leg_member.render(screen, 0, 0, camera, 0)
-        self.right_leg_member.render(screen, 0, 0, camera, 0)
+        self.left_leg_member.render(screen, camera, 0, 0, 0)
+        self.right_leg_member.render(screen, camera, 0, 0, 0)
 
     """
         GETTERS AND SETTERS

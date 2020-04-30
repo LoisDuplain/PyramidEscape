@@ -9,8 +9,8 @@ class Member(Renderer):
     def __init__(self, character_velocity_remover, sprite, anchor_type, fixed_to=None):
         super().__init__(sprite)
         super().set_anchor(anchor_type)
-        super().set_rendering_anchor(True)
-        super().set_rendering_border(True)
+        super().set_rendering_anchor(False)
+        super().set_rendering_border(False)
 
         self.player_velocity_remover = character_velocity_remover
 
@@ -26,7 +26,7 @@ class Member(Renderer):
         METHODS
     """
 
-    def render(self, screen, world_x, world_y, camera, angle=0):
+    def render(self, screen, camera, world_x, world_y, angle=0):
         render_x = world_x
         render_y = world_y
         if self.fixed_to is not None:
@@ -36,7 +36,7 @@ class Member(Renderer):
         self.last_render_x = render_x
         self.last_render_y = render_y
 
-        super().render(screen, render_x, render_y, camera, angle)
+        super().render(screen, camera, render_x, render_y, angle)
 
     """
         GETTERS AND SETTERS

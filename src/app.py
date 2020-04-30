@@ -1,6 +1,7 @@
 import pygame
 import utils
 import CONSTANTS
+from level import levelloader
 from level.level import Level
 
 current_level = None
@@ -12,7 +13,7 @@ def main():
     screen = pygame.display.set_mode((CONSTANTS.CONSTANT_WINDOW_WIDTH, CONSTANTS.CONSTANT_WINDOW_HEIGHT))
     pygame.display.set_caption("Pyramid Escape")
 
-    current_level = Level("main-menu.lvl")
+    set_current_level(Level("main-menu.lvl"), True)
 
     last_update_date = utils.get_current_time_millis()
     last_render_date = utils.get_current_time_millis()
@@ -22,6 +23,8 @@ def main():
         # Update level
         update_delta_time = utils.get_current_time_millis() - last_update_date
         if update_delta_time >= 1000/120:
+            if current_level.is_debug():
+                print('Update delta time:', update_delta_time)
             last_update_date = utils.get_current_time_millis()
             current_level.update(update_delta_time, pygame.key.get_pressed())
             # Check events
@@ -36,14 +39,16 @@ def main():
                 current_level.events(event)
                 
         render_delta_time = utils.get_current_time_millis() - last_render_date
-        if render_delta_time >= 1000/30:
+        if render_delta_time >= 1000/120:
+            if current_level.is_debug():
+                print('Render delta time:', render_delta_time)
             last_render_date = utils.get_current_time_millis()
             # Render level
             # 1- Render background
             screen.fill((0, 0, 0))
             # 2- Render level
             current_level.render(screen)
-            # 3- Update screen to show rendered elements to player
+            # 3- Update screen to show rendered elements to client
             pygame.display.update()
 
 
@@ -51,9 +56,11 @@ def get_current_level():
     return current_level
 
 
-def set_current_level(new_current_level):
+def set_current_level(new_current_level, load_tiles):
     global current_level
     current_level = new_current_level
+    if load_tiles:
+        levelloader.load_tiles(current_level)
 
 
 if __name__ == '__main__':

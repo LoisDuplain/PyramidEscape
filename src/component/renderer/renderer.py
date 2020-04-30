@@ -2,6 +2,7 @@ import math
 import pygame
 from enum import Enum
 
+import CONSTANTS
 from component.renderer import imageloader
 import utils
 
@@ -35,10 +36,9 @@ class Renderer(pygame.sprite.Sprite):
         METHODS
     """
 
-    def render(self, screen, x, y, camera, angle=0):
-        # TODO prendre en cosidération la fake caméra, bon courage pcq ca va être casse couille ;)
-        screen.blit(self.current_image, self.rect)
+    def render(self, screen, camera, x, y, angle=0):
         self.compute_center_point(screen, x, y, angle, camera)
+        screen.blit(self.current_image, self.rect)
         if self.render_border:
             pygame.draw.rect(screen, pygame.Color(0, 255, 0), self.rect, 1)
 
@@ -57,14 +57,17 @@ class Renderer(pygame.sprite.Sprite):
         nx = math.cos(a)*d
         ny = math.sin(a)*d
 
+        rx = camera.get_render_x(x + nx)
+        ry = camera.get_render_y(y + ny)
+
+        self.rect.center = (rx, ry)
+
         if self.render_anchor:
-            pygame.draw.line(screen, pygame.Color(200, 66, 245), (camera.get_render_x(x), camera.get_render_y(y)), (camera.get_render_x(x + nx), camera.get_render_y(y)))
-            pygame.draw.line(screen, pygame.Color(200, 66, 245), (camera.get_render_x(x + nx), camera.get_render_y(y)), (camera.get_render_x(x + nx), camera.get_render_y(y + ny)))
+            pygame.draw.line(screen, pygame.Color(200, 66, 245), (camera.get_render_x(x), camera.get_render_y(y)), (rx, camera.get_render_y(y)))
+            pygame.draw.line(screen, pygame.Color(200, 66, 245), (rx, camera.get_render_y(y)), (rx, ry))
             pygame.draw.line(screen, pygame.Color(0, 0, 255), (camera.get_render_x(x - 5), camera.get_render_y(y)), (camera.get_render_x(x + 5), camera.get_render_y(y)))
             pygame.draw.line(screen, pygame.Color(255, 0, 0), (camera.get_render_x(x), camera.get_render_y(y - 5)), (camera.get_render_x(x), camera.get_render_y(y + 5)))
 
-        self.rect.center = (camera.get_render_x(x + nx), camera.get_render_y(y + ny))
-        
     """
         GETTERS AND SETTERS
     """
