@@ -2,6 +2,7 @@ class Entity:
 
     def __init__(self):
         self.parts = []
+        self.colliders = []
 
         self.world_x = 0
         self.world_y = 0
@@ -19,6 +20,12 @@ class Entity:
 
     def get_parts(self):
         return self.parts
+
+    def add_collider(self, collider):
+        self.colliders.append(collider)
+
+    def get_colliders(self):
+        return self.colliders
 
     def set_world_x(self, world_x):
         self.world_x = world_x

@@ -1,3 +1,5 @@
+import math
+
 from component.renderer.renderer import Renderer
 
 
@@ -15,9 +17,9 @@ class EntityPart(Renderer):
         self.angle = 0
 
     def render(self, screen, camera, x=0, y=0, angle=0):
-        super().render(screen, camera, x+self.offset_x, y+self.offset_y, angle+self.angle)
+        super().render(screen, camera, x+self.offset_x, y+self.offset_y, self.angle + angle)
         for child in self.children:
-            child.render(screen, camera, x+self.offset_x, y+self.offset_y, angle+self.angle)
+            child.render(screen, camera, x + self.offset_x, y + self.offset_y, self.angle + angle)
 
     def update(self, delta_time, keys):
         pass
@@ -58,5 +60,11 @@ class EntityPart(Renderer):
     def get_offset_y(self):
         return self.offset_y
 
+    def set_angle(self, angle):
+        self.angle = angle
+
     def add_angle(self, angle):
         self.angle += angle
+
+    def get_angle(self):
+        return self.angle

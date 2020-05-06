@@ -1,62 +1,54 @@
 import math
 
 import utils
-from entity.player.member.chestmember import ChestMember
-from entity.player.member.headmember import HeadMember
-from entity.player.member.leftarmmember import LeftArmMember
-from entity.player.member.leftlegmember import LeftLegMember
-from entity.player.member.rightarmmember import RightArmMember
-from entity.player.member.rightlegmember import RightLegMember
+from component.renderer.renderer import AnchorType
+from entity.entity import Entity
+from entity.player.chestpart import ChestPart
+from entity.player.headpart import HeadPart
+from entity.player.leftarmpart import LeftArmPart
+from entity.player.leftlegpart import LeftLegPart
+from entity.player.rightarmpart import RightArmPart
+from entity.player.rightlegpart import RightLegPart
 
 
-class Player:
-    """
-        CONSTRUCT
-    """
+class Player(Entity):
 
     def __init__(self):
-        self.world_x = 350
-        self.world_y = 130
+        super().__init__()
 
-        self.head_member = HeadMember()
+        self.head_part = HeadPart()
 
-        self.chest_member = ChestMember(self.head_member)
+        self.chest_part = ChestPart()
+        self.chest_part.set_anchor(AnchorType.TOP_MIDDLE)
+        self.chest_part.set_offset_y(15)
 
-        self.left_arm_member = LeftArmMember(self.chest_member)
-        self.right_arm_member = RightArmMember(self.chest_member)
+        self.left_arm_part = LeftArmPart()
+        self.left_arm_part.set_anchor(AnchorType.TOP_RIGHT)
+        self.left_arm_part.set_offset_x(-15)
 
-        self.left_leg_member = LeftLegMember(self.chest_member)
-        self.right_leg_member = RightLegMember(self.chest_member)
+        self.right_arm_part = RightArmPart()
+        self.right_arm_part.set_anchor(AnchorType.TOP_LEFT)
+        self.right_arm_part.set_offset_x(15)
 
-        self.start_at = utils.get_current_time_millis()
+        self.left_leg_part = LeftLegPart()
+        self.left_leg_part.set_anchor(AnchorType.TOP_MIDDLE)
+        self.left_leg_part.set_offset_x(-7.5)
+        self.left_leg_part.set_offset_y(50)
 
-    """
-        METHODS
-    """
+        self.right_leg_part = RightLegPart()
+        self.right_leg_part.set_anchor(AnchorType.TOP_MIDDLE)
+        self.right_leg_part.set_offset_x(7.5)
+        self.right_leg_part.set_offset_y(50)
 
-    def render(self, screen, camera):
-        self.head_member.render(screen, camera, self.world_x, self.world_y, 0)
+        self.head_part.add_child(self.chest_part)
 
-        self.chest_member.render(screen, camera, 0, 0, 0)
+        self.chest_part.add_child(self.left_arm_part)
+        self.chest_part.add_child(self.right_arm_part)
+        self.chest_part.add_child(self.left_leg_part)
+        self.chest_part.add_child(self.right_leg_part)
 
-        self.left_arm_member.render(screen, camera, 0, 0, utils.map(math.cos((utils.get_current_time_millis()-self.start_at)/300), -1, 1, -3, 2))
-        self.right_arm_member.render(screen, camera, 0, 0, utils.map(math.cos((utils.get_current_time_millis()-self.start_at)/350), -1, 1, -3, 2))
+        super().add_part(self.head_part)
 
-        self.left_leg_member.render(screen, camera, 0, 0, 0)
-        self.right_leg_member.render(screen, camera, 0, 0, 0)
-
-    """
-        GETTERS AND SETTERS
-    """
-
-    def get_world_x(self):
-        return self.world_x
-
-    def set_world_x(self, new_world_x):
-        self.world_x = new_world_x
-
-    def get_world_y(self):
-        return self.world_y
-
-    def set_world_y(self, new_world_y):
-        self.world_y = new_world_y
+    def update(self, delta_time, keys):
+        self.left_arm_part.set_angle(utils.map(math.cos((utils.get_current_time_millis()) / 300), -1, 1, -3, 2))
+        self.right_arm_part.set_angle(utils.map(math.cos((utils.get_current_time_millis()) / 350), -1, 1, -3, 2))

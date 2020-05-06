@@ -1,55 +1,74 @@
-from level.tile import TileType, Tile
+from level.tile import Tile, TileType
 
 
 def load_tiles(level):
-    # TODO Load chars into the file that contains level_name in his file name and then, generate tiles
     file = open("level/files/" + level.get_level_name(), "r")
-    y = 0
-    for line in file:
-        x = 0
-        x_tiles = []
-        for char in line:
+    rows = file.read().split("\n")
+    for y in range(len(rows)):
+        row = rows[y]
+        columns = row.split("-")
+
+        tile_row = []
+
+        for x in range(len(columns)):
+            column = columns[x].replace("(", "").replace(")", "").replace(" ", "").replace("\"", "")
+
+            params = column.split(",")
+
             tile_type = None
-            if char == "0":
+            if params[0] == "air":
                 tile_type = TileType.AIR
-            elif char == "1":
+            elif params[0] == "ground":
                 tile_type = TileType.GROUND
-            elif char == "2":
+            elif params[0] == "spike":
                 tile_type = TileType.SPIKE
             else:
                 break
-            if tile_type != TileType.AIR:
-                x_tiles.append(Tile(tile_type, x, y))
-            x += 1
-        level.get_tiles().append(x_tiles)
-        y += 1
-    file.close()
+
+            tile = Tile(tile_type, x, y)
+
+            if len(params) > 1:
+                for param_index in range(1, len(params)):
+                    param_value_by_key = params[param_index].split(":")
+                    tile.get_params()[param_value_by_key[0]] = param_value_by_key[1]
+
+            tile_row.append(tile)
+
+        level.get_tiles().append(tile_row)
 
     file = open("level/files/" + level.get_level_name(), "r")
-    y = 0
-    for line in file:
-        x = len(line) - 2
-        """
-            Pourquoi -2 ?
-            len(line) renvoie le nombre de caractères sur une ligne mais nous on veut compter à partir de 0 donc cela fait déjà -1
-            Ensuite on a le \n à la fin qu'il faut supprimer donc encore -1
+    rows = file.read().split("\n")
+    for y in range(len(rows)):
+        row = rows[y]
+        columns = row.split("-")
+        columns.reverse()
 
-            Donc -1 - 1 = -2
-        """
-        x_tiles = []
-        for char in line:
+        tile_row = []
+
+        for x in range(len(columns)):
+            column = columns[x].replace("(", "").replace(")", "").replace(" ", "").replace("\"", "")
+
+            params = column.split(",")
+
             tile_type = None
-            if char == "0":
+            if params[0] == "air":
                 tile_type = TileType.AIR
-            elif char == "1":
+            elif params[0] == "ground":
                 tile_type = TileType.GROUND
-            elif char == "2":
+            elif params[0] == "spike":
                 tile_type = TileType.SPIKE
             else:
                 break
-            if tile_type != TileType.AIR:
-                x_tiles.append(Tile(tile_type, x, y + 9))
-            x -= 1
-        level.get_tiles().append(x_tiles)
-        y += 1
+
+            tile = Tile(tile_type, x, y + len(rows))
+
+            if len(params) > 1:
+                for param_index in range(1, len(params)):
+                    param_value_by_key = params[param_index].split(":")
+                    tile.get_params()[param_value_by_key[0]] = param_value_by_key[1]
+
+            tile_row.append(tile)
+
+        level.get_tiles().append(tile_row)
+
     file.close()

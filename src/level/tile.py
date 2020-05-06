@@ -19,16 +19,18 @@ class Tile(Renderer):
     def __init__(self, tile_type, x, y):
         super().__init__(tile_type.value)
         super().set_anchor(AnchorType.TOP_LEFT)
+
         self.tile_type = tile_type
         self.x = x
         self.y = y
+        self.params = {}
 
     """
         METHODS
     """
 
     def render(self, screen, camera):
-        super().render(screen, camera, self.x*self.CONSTANT_TILE_WIDTH_FHD, self.y*self.CONSTANT_TILE_HEIGHT_FHD)
+        super().render(screen, camera, self.x * self.CONSTANT_TILE_WIDTH_FHD, self.y * self.CONSTANT_TILE_HEIGHT_FHD)
         pass
 
     """
@@ -52,3 +54,9 @@ class Tile(Renderer):
 
     def set_y(self, new_y):
         self.y = new_y
+
+    def set_params(self, params):
+        self.params = params
+
+    def get_params(self):
+        return self.params

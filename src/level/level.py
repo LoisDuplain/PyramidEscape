@@ -1,10 +1,8 @@
 import pygame
 
-from component.renderer.renderer import AnchorType
-from entity.entity import Entity
-from entity.entitypart import EntityPart
-from level.camera import Camera
+from entity.entitymanager import EntityManager
 from entity.player.player import Player
+from level.camera import Camera
 import CONSTANTS
 
 
@@ -15,26 +13,18 @@ class Level:
 
     def __init__(self, level_name):
         self.level_name = level_name
+
+        self.tiles = []
+
+        self.entity_manager = EntityManager()
         self.player = Player()
+        self.entity_manager.register_entity(self.player)
 
         self.camera = Camera()
         self.camera.set_x(self.player.get_world_x())
         self.camera.set_y(self.player.get_world_y())
 
-        self.tiles = []
-
         self.debug = False
-
-        self.entity = Entity()
-
-        self.head_part = EntityPart("player-head.png")
-
-        self.chest_part = EntityPart("player-chest.png")
-        self.chest_part.set_anchor(AnchorType.TOP_MIDDLE)
-        self.chest_part.set_offset_y(25)
-        self.head_part.add_child(self.chest_part)
-
-        self.entity.add_part(self.head_part)
 
     """
         METHODS
@@ -45,13 +35,13 @@ class Level:
             for x in range(len(self.tiles[y])):
                 self.tiles[y][x].render(screen, self.camera)
 
+        # Rendering entities
+        for entity in self.entity_manager.get_entities():
+            entity.render(screen, self.camera)
+
         # TODO Render movable entities (Fireball etc)
-        # TODO Render player
-        self.player.render(screen, self.camera)
         # TODO Render particles
         # TODO Render HUD
-
-        self.entity.render(screen, self.camera)
 
         if self.debug:
             pygame.draw.line(screen, pygame.Color(255, 255, 255), (CONSTANTS.CONSTANT_WINDOW_WIDTH / 2, 0), (CONSTANTS.CONSTANT_WINDOW_WIDTH / 2, CONSTANTS.CONSTANT_WINDOW_HEIGHT))
@@ -77,9 +67,10 @@ class Level:
     def update(self, delta_time, keys):
         # TODO Update player pos
         # TODO Update camera pos
-        # TODO Update particle systems
+        # TODO Update particle emitters
         # TODO Update movable entities
-        self.head_part.add_angle(1)
+
+        self.player.update(delta_time, keys)
 
         movement_speed = 5 * delta_time / 10
         if keys[pygame.K_d]:
