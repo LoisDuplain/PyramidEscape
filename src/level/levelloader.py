@@ -39,6 +39,9 @@ def load_tiles(level):
     file = open("level/files/" + level.get_level_name(), "r")
     rows = file.read().split("\n")
     for y in range(len(rows)):
+        if y <= 0:
+            continue
+
         row = rows[y]
         columns = row.split("-")
         columns.reverse()
@@ -60,7 +63,7 @@ def load_tiles(level):
             else:
                 break
 
-            tile = Tile(tile_type, x, y + len(rows))
+            tile = Tile(tile_type, x, y + len(rows) - 1)
 
             if len(params) > 1:
                 for param_index in range(1, len(params)):

@@ -1,5 +1,6 @@
 import pygame
 
+from component.renderer.renderer import Renderer, AnchorType
 from entity.entitymanager import EntityManager
 from entity.player.player import Player
 from level.camera import Camera
@@ -26,22 +27,22 @@ class Level:
 
         self.debug = False
 
+        self.background = Renderer("background.jpg")
+        self.background.set_anchor(AnchorType.TOP_LEFT)
+
     """
         METHODS
     """
 
     def render(self, screen):
+        self.background.render(screen, self.camera, 0, 0)
+
         for y in range(len(self.tiles)):
             for x in range(len(self.tiles[y])):
                 self.tiles[y][x].render(screen, self.camera)
 
-        # Rendering entities
         for entity in self.entity_manager.get_entities():
             entity.render(screen, self.camera)
-
-        # TODO Render movable entities (Fireball etc)
-        # TODO Render particles
-        # TODO Render HUD
 
         if self.debug:
             pygame.draw.line(screen, pygame.Color(255, 255, 255), (CONSTANTS.CONSTANT_WINDOW_WIDTH / 2, 0), (CONSTANTS.CONSTANT_WINDOW_WIDTH / 2, CONSTANTS.CONSTANT_WINDOW_HEIGHT))
@@ -65,11 +66,6 @@ class Level:
         pass
 
     def update(self, delta_time, keys):
-        # TODO Update player pos
-        # TODO Update camera pos
-        # TODO Update particle emitters
-        # TODO Update movable entities
-
         self.player.update(delta_time, keys)
 
         movement_speed = 5 * delta_time / 10
